@@ -1,0 +1,13 @@
+services:
+  reconstruction-service:
+    environment:
+      INFERENCE_DEVICE: gpu
+      NVIDIA_VISIBLE_DEVICES: all
+    gpus: all
+
+  detection-service:
+    environment:
+      INFERENCE_DEVICE: gpu
+      NVIDIA_VISIBLE_DEVICES: all
+    gpus: all
+
