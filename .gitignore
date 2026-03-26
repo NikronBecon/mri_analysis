@@ -4,4 +4,5 @@ __pycache__/
 .data/
 *.pyc
 *.db
-
+data/*.h5
+outputs/*
