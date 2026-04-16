@@ -1,0 +1,90 @@
+{
+  "sample_id": "BRATS_003",
+  "model": "SegResNet (MONAI BraTS bundle v0.5.4)",
+  "modalities_used": [
+    "T1c",
+    "T1",
+    "T2",
+    "FLAIR"
+  ],
+  "pathologies": [
+    {
+      "type": "tumor_core",
+      "display_name": "Tumor Core (TC)",
+      "description": "Necrotic/non-enhancing tumor core and enhancing tumor regions",
+      "clinical_significance": "Indicates the solid, metabolically active portion of the tumor. Important for surgical planning and treatment response assessment.",
+      "volume_voxels": 153448,
+      "volume_ml": 153.45,
+      "confidence": 0.9238,
+      "bounding_box": {
+        "min": [
+          104,
+          39,
+          62
+        ],
+        "max": [
+          179,
+          122,
+          137
+        ]
+      },
+      "centroid": [
+        145.9,
+        79.1,
+        93.3
+      ]
+    },
+    {
+      "type": "whole_tumor",
+      "display_name": "Whole Tumor (WT)",
+      "description": "Complete tumor extent including core, edema, and enhancing regions",
+      "clinical_significance": "Defines the total tumor burden including peritumoral edema. Used for overall tumor staging and monitoring progression.",
+      "volume_voxels": 188073,
+      "volume_ml": 188.07,
+      "confidence": 0.9381,
+      "bounding_box": {
+        "min": [
+          101,
+          38,
+          59
+        ],
+        "max": [
+          180,
+          136,
+          137
+        ]
+      },
+      "centroid": [
+        144.4,
+        80.9,
+        92.6
+      ]
+    },
+    {
+      "type": "enhancing_tumor",
+      "display_name": "Enhancing Tumor (ET)",
+      "description": "Gadolinium-enhancing tumor regions indicating active blood-brain barrier breakdown",
+      "clinical_significance": "Reflects areas of active tumor growth with neovascularization. Key indicator for tumor grading (typically high-grade glioma) and treatment response.",
+      "volume_voxels": 138545,
+      "volume_ml": 138.54,
+      "confidence": 0.8915,
+      "bounding_box": {
+        "min": [
+          105,
+          39,
+          62
+        ],
+        "max": [
+          179,
+          120,
+          137
+        ]
+      },
+      "centroid": [
+        146.1,
+        79.8,
+        93.6
+      ]
+    }
+  ]
+}

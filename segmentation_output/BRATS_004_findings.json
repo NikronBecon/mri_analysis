@@ -1,0 +1,90 @@
+{
+  "sample_id": "BRATS_004",
+  "model": "SegResNet (MONAI BraTS bundle v0.5.4)",
+  "modalities_used": [
+    "T1c",
+    "T1",
+    "T2",
+    "FLAIR"
+  ],
+  "pathologies": [
+    {
+      "type": "tumor_core",
+      "display_name": "Tumor Core (TC)",
+      "description": "Necrotic/non-enhancing tumor core and enhancing tumor regions",
+      "clinical_significance": "Indicates the solid, metabolically active portion of the tumor. Important for surgical planning and treatment response assessment.",
+      "volume_voxels": 97436,
+      "volume_ml": 97.44,
+      "confidence": 0.9516,
+      "bounding_box": {
+        "min": [
+          61,
+          84,
+          64
+        ],
+        "max": [
+          117,
+          146,
+          131
+        ]
+      },
+      "centroid": [
+        86.7,
+        115.9,
+        94.1
+      ]
+    },
+    {
+      "type": "whole_tumor",
+      "display_name": "Whole Tumor (WT)",
+      "description": "Complete tumor extent including core, edema, and enhancing regions",
+      "clinical_significance": "Defines the total tumor burden including peritumoral edema. Used for overall tumor staging and monitoring progression.",
+      "volume_voxels": 112867,
+      "volume_ml": 112.87,
+      "confidence": 0.9623,
+      "bounding_box": {
+        "min": [
+          60,
+          73,
+          60
+        ],
+        "max": [
+          126,
+          147,
+          131
+        ]
+      },
+      "centroid": [
+        87.1,
+        116.3,
+        94.0
+      ]
+    },
+    {
+      "type": "enhancing_tumor",
+      "display_name": "Enhancing Tumor (ET)",
+      "description": "Gadolinium-enhancing tumor regions indicating active blood-brain barrier breakdown",
+      "clinical_significance": "Reflects areas of active tumor growth with neovascularization. Key indicator for tumor grading (typically high-grade glioma) and treatment response.",
+      "volume_voxels": 93483,
+      "volume_ml": 93.48,
+      "confidence": 0.8996,
+      "bounding_box": {
+        "min": [
+          61,
+          84,
+          64
+        ],
+        "max": [
+          117,
+          146,
+          131
+        ]
+      },
+      "centroid": [
+        86.8,
+        115.7,
+        94.4
+      ]
+    }
+  ]
+}

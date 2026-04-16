@@ -1,0 +1,90 @@
+{
+  "sample_id": "BRATS_001",
+  "model": "SegResNet (MONAI BraTS bundle v0.5.4)",
+  "modalities_used": [
+    "T1c",
+    "T1",
+    "T2",
+    "FLAIR"
+  ],
+  "pathologies": [
+    {
+      "type": "tumor_core",
+      "display_name": "Tumor Core (TC)",
+      "description": "Necrotic/non-enhancing tumor core and enhancing tumor regions",
+      "clinical_significance": "Indicates the solid, metabolically active portion of the tumor. Important for surgical planning and treatment response assessment.",
+      "volume_voxels": 100188,
+      "volume_ml": 100.19,
+      "confidence": 0.9162,
+      "bounding_box": {
+        "min": [
+          131,
+          75,
+          31
+        ],
+        "max": [
+          183,
+          155,
+          98
+        ]
+      },
+      "centroid": [
+        159.8,
+        115.5,
+        65.4
+      ]
+    },
+    {
+      "type": "whole_tumor",
+      "display_name": "Whole Tumor (WT)",
+      "description": "Complete tumor extent including core, edema, and enhancing regions",
+      "clinical_significance": "Defines the total tumor burden including peritumoral edema. Used for overall tumor staging and monitoring progression.",
+      "volume_voxels": 138094,
+      "volume_ml": 138.09,
+      "confidence": 0.9256,
+      "bounding_box": {
+        "min": [
+          118,
+          69,
+          28
+        ],
+        "max": [
+          183,
+          163,
+          99
+        ]
+      },
+      "centroid": [
+        158.8,
+        114.1,
+        67.4
+      ]
+    },
+    {
+      "type": "enhancing_tumor",
+      "display_name": "Enhancing Tumor (ET)",
+      "description": "Gadolinium-enhancing tumor regions indicating active blood-brain barrier breakdown",
+      "clinical_significance": "Reflects areas of active tumor growth with neovascularization. Key indicator for tumor grading (typically high-grade glioma) and treatment response.",
+      "volume_voxels": 90143,
+      "volume_ml": 90.14,
+      "confidence": 0.8812,
+      "bounding_box": {
+        "min": [
+          131,
+          75,
+          31
+        ],
+        "max": [
+          183,
+          155,
+          98
+        ]
+      },
+      "centroid": [
+        159.3,
+        115.2,
+        65.9
+      ]
+    }
+  ]
+}

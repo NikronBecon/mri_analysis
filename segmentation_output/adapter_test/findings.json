@@ -1,0 +1,34 @@
+{
+  "job_id": "demo-001",
+  "study_id": "demo-001",
+  "source_file": "BRATS_001.nii.gz",
+  "findings": [
+    {
+      "pathology_type": "tumor_core",
+      "confidence": 0.9162,
+      "location": {
+        "description": "centroid=(160,116,65), volume=100.19mL"
+      },
+      "explanation": "Necrotic/non-enhancing tumor core and enhancing regions"
+    },
+    {
+      "pathology_type": "whole_tumor",
+      "confidence": 0.9256,
+      "location": {
+        "description": "centroid=(159,114,67), volume=138.09mL"
+      },
+      "explanation": "Complete tumor extent including edema"
+    },
+    {
+      "pathology_type": "enhancing_tumor",
+      "confidence": 0.8812,
+      "location": {
+        "description": "centroid=(159,115,66), volume=90.14mL"
+      },
+      "explanation": "Gadolinium-enhancing active tumor regions"
+    }
+  ],
+  "artifacts": {
+    "segmentation_nifti": "annotated_segmentation.nii.gz"
+  }
+}

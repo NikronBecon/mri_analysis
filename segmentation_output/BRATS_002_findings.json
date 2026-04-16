@@ -1,0 +1,90 @@
+{
+  "sample_id": "BRATS_002",
+  "model": "SegResNet (MONAI BraTS bundle v0.5.4)",
+  "modalities_used": [
+    "T1c",
+    "T1",
+    "T2",
+    "FLAIR"
+  ],
+  "pathologies": [
+    {
+      "type": "tumor_core",
+      "display_name": "Tumor Core (TC)",
+      "description": "Necrotic/non-enhancing tumor core and enhancing tumor regions",
+      "clinical_significance": "Indicates the solid, metabolically active portion of the tumor. Important for surgical planning and treatment response assessment.",
+      "volume_voxels": 64937,
+      "volume_ml": 64.94,
+      "confidence": 0.9441,
+      "bounding_box": {
+        "min": [
+          74,
+          39,
+          67
+        ],
+        "max": [
+          122,
+          97,
+          128
+        ]
+      },
+      "centroid": [
+        99.6,
+        69.1,
+        98.5
+      ]
+    },
+    {
+      "type": "whole_tumor",
+      "display_name": "Whole Tumor (WT)",
+      "description": "Complete tumor extent including core, edema, and enhancing regions",
+      "clinical_significance": "Defines the total tumor burden including peritumoral edema. Used for overall tumor staging and monitoring progression.",
+      "volume_voxels": 83895,
+      "volume_ml": 83.89,
+      "confidence": 0.9344,
+      "bounding_box": {
+        "min": [
+          71,
+          38,
+          62
+        ],
+        "max": [
+          133,
+          107,
+          132
+        ]
+      },
+      "centroid": [
+        99.9,
+        71.0,
+        97.5
+      ]
+    },
+    {
+      "type": "enhancing_tumor",
+      "display_name": "Enhancing Tumor (ET)",
+      "description": "Gadolinium-enhancing tumor regions indicating active blood-brain barrier breakdown",
+      "clinical_significance": "Reflects areas of active tumor growth with neovascularization. Key indicator for tumor grading (typically high-grade glioma) and treatment response.",
+      "volume_voxels": 58628,
+      "volume_ml": 58.63,
+      "confidence": 0.9155,
+      "bounding_box": {
+        "min": [
+          75,
+          39,
+          68
+        ],
+        "max": [
+          121,
+          97,
+          128
+        ]
+      },
+      "centroid": [
+        99.7,
+        69.5,
+        97.8
+      ]
+    }
+  ]
+}
