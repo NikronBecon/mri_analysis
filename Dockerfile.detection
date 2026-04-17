@@ -8,9 +8,10 @@ ENV PYTHONUNBUFFERED=1
 COPY pyproject.toml README.md ./
 COPY mri_analysis ./mri_analysis
 
-RUN pip install --no-cache-dir .
+RUN mkdir -p /app/model_bundles/brats_mri_segmentation/models
+
+RUN pip install --no-cache-dir ".[detection]"
 
 EXPOSE 8000
 
 CMD ["uvicorn", "mri_analysis.detection_service.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
-

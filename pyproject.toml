@@ -22,7 +22,20 @@ dependencies = [
 dev = [
   "pytest>=8,<9",
 ]
+reconstruction = [
+  "h5py>=3.10,<4",
+  "monai>=1.4,<2",
+  "numpy>=1.26,<2",
+  "pydicom>=3,<4",
+  "torch>=2.4,<3",
+]
+detection = [
+  "monai>=1.4,<2",
+  "nibabel>=5,<6",
+  "numpy>=1.26,<2",
+  "pydicom>=3,<4",
+  "torch>=2.4,<3",
+]
 
 [tool.setuptools.packages.find]
 include = ["mri_analysis*"]
-

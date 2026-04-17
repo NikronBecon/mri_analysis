@@ -7,7 +7,10 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Request
 
-from mri_analysis.reconstruction_service.adapters import ReconstructionAdapter, StubReconstructionAdapter
+from mri_analysis.reconstruction_service.adapters import (
+    ReconstructionAdapter,
+    build_reconstruction_adapter_from_env,
+)
 from mri_analysis.shared.schemas import ReconstructionRequest, ReconstructionResponse
 from mri_analysis.shared.storage import StorageClient, build_storage_from_env
 
@@ -17,7 +20,7 @@ def create_app(
     adapter: Optional[ReconstructionAdapter] = None,
 ) -> FastAPI:
     storage = storage or build_storage_from_env()
-    adapter = adapter or StubReconstructionAdapter()
+    adapter = adapter or build_reconstruction_adapter_from_env()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -52,7 +55,7 @@ def create_app(
             )
         return ReconstructionResponse(
             reconstructed_dicom_uri=output_uri,
-            metadata={"adapter": "stub", "correlation_id": payload.correlation_id},
+            metadata={"adapter": getattr(request.app.state.adapter, "name", "unknown"), "correlation_id": payload.correlation_id},
         )
 
     return app

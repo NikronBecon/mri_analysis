@@ -62,7 +62,7 @@ def test_results_before_completion_return_conflict(pipeline_service: PipelineSer
 
 
 def test_failed_detection_marks_job_failed(session_factory, storage, reconstruction_client, detection_client):
-    from tests.conftest import AppInferenceClient
+    from conftest import AppInferenceClient
 
     class MixedInferenceClient(AppInferenceClient):
         def detect(self, request):

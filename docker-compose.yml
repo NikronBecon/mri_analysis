@@ -42,6 +42,8 @@ services:
       STORAGE_ACCESS_KEY: ${STORAGE_ACCESS_KEY:-minioadmin}
       STORAGE_SECRET_KEY: ${STORAGE_SECRET_KEY:-minioadmin}
       STORAGE_BUCKET: ${STORAGE_BUCKET:-mri-analysis}
+      RECONSTRUCTION_ADAPTER: ${RECONSTRUCTION_ADAPTER:-monai_unet}
+      RECONSTRUCTION_MODEL_PATH: ${RECONSTRUCTION_MODEL_PATH:-/app/demo_checkpoint/unet_mri_reconstruction.pt}
       INFERENCE_DEVICE: ${INFERENCE_DEVICE:-cpu}
     depends_on:
       minio:
@@ -64,6 +66,8 @@ services:
       STORAGE_ACCESS_KEY: ${STORAGE_ACCESS_KEY:-minioadmin}
       STORAGE_SECRET_KEY: ${STORAGE_SECRET_KEY:-minioadmin}
       STORAGE_BUCKET: ${STORAGE_BUCKET:-mri-analysis}
+      DETECTION_ADAPTER: ${DETECTION_ADAPTER:-stub}
+      DETECTION_BUNDLE_DIR: ${DETECTION_BUNDLE_DIR:-/app/model_bundles/brats_mri_segmentation}
       INFERENCE_DEVICE: ${INFERENCE_DEVICE:-cpu}
     depends_on:
       minio:

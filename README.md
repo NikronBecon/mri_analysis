@@ -1,86 +1,72 @@
 # MRI Analysis
 
-MRI Analysis v1 is an async MRI inference pipeline with three application services:
+MRI Analysis is a containerized MRI processing pipeline with three services:
 
-- `pipeline-api`: public upload and job/status API
-- `reconstruction-service`: black-box MRI reconstruction adapter
-- `detection-service`: black-box pathology detection adapter
+- `pipeline-api`: public API for upload, job tracking, and artifact download
+- `reconstruction-service`: reconstructs MRI input into DICOM output
+- `detection-service`: analyzes reconstructed DICOM and produces annotated DICOM plus findings JSON
 
-All file exchange happens through object storage URIs, not shared host paths. In v1 the model side is implemented with stub adapters so the orchestration and service contracts are ready before real model code lands.
+The system is built around Docker, PostgreSQL, and MinIO. Services exchange artifacts through object storage URIs, which keeps them isolated and easy to orchestrate.
+
+## What Is Included
+
+- Async end-to-end pipeline with job lifecycle management
+- Real reconstruction adapter based on MONAI `BasicUNet`
+- Stub detection adapter for reproducible end-to-end runs
+- Optional SegResNet detection adapter that can be enabled with an external MONAI bundle
+- Docker Compose setup, smoke test script, and automated tests
+
+## Current Status
+
+- Reconstruction is connected to a real checkpoint stored in `demo_checkpoint/unet_mri_reconstruction.pt`.
+- Detection runs in stub mode by default, so the repository works without external weights.
+- If you have an external SegResNet bundle, the detection service can be switched to it through environment variables.
+
+## Repository Layout
+
+```text
+mri_analysis/
+  pipeline_api/           API, worker, persistence, orchestration
+  reconstruction_service/ reconstruction adapters and HTTP service
+  detection_service/      detection adapters and HTTP service
+  shared/                 schemas and storage helpers
+demo_checkpoint/          bundled reconstruction checkpoint
+docs/                     architecture notes
+scripts/                  smoke tests and helper scripts
+tests/                    API and integration tests
+```
 
 ## Architecture
 
-See [docs/architecture.md](/Users/nikron/Desktop/mri_analysis/docs/architecture.md) for the component and data-flow view.
+High-level architecture is documented in [docs/architecture.md](docs/architecture.md).
 
-Public endpoints:
+Public API:
 
 - `POST /v1/jobs`
 - `GET /v1/jobs/{job_id}`
 - `GET /v1/jobs/{job_id}/results`
 - `GET /v1/jobs/{job_id}/artifacts/{artifact_type}`
 
-Internal endpoints:
+Internal services:
 
 - `POST /infer` on `reconstruction-service`
 - `POST /infer` on `detection-service`
 
-Job states:
+## Quick Start
 
-- `uploaded`
-- `queued`
-- `reconstructing`
-- `detecting`
-- `completed`
-- `failed`
-
-## Local Python Run
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install ".[dev]"
-uvicorn mri_analysis.pipeline_api.main:create_app --factory --reload
-```
-
-For service-by-service local work, run:
-
-```bash
-uvicorn mri_analysis.reconstruction_service.main:create_app --factory --port 8001 --reload
-uvicorn mri_analysis.detection_service.main:create_app --factory --port 8002 --reload
-```
-
-When running outside Compose, set storage/database env vars first. For test-only local runs you can use:
-
-```bash
-export STORAGE_MODE=local
-export STORAGE_ROOT=.data/storage
-export DATABASE_URL=sqlite:///./mri_analysis.db
-```
-
-## Docker Compose
-
-CPU baseline:
+1. Copy the example environment file:
 
 ```bash
 cp .env.example .env
+```
+
+2. Start the stack:
+
+```bash
 docker compose up --build -d
 ```
 
-GPU-enabled inference containers:
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
-```
-
-Default service ports:
-
-- `pipeline-api`: `http://localhost:8000`
-- `reconstruction-service`: `http://localhost:8001`
-- `detection-service`: `http://localhost:8002`
-- `minio`: `http://localhost:9000`
-- `minio console`: `http://localhost:9001`
-
-Quick health check:
+3. Check service health:
 
 ```bash
 curl http://localhost:8000/health
@@ -88,28 +74,23 @@ curl http://localhost:8001/health
 curl http://localhost:8002/health
 ```
 
-End-to-end smoke test:
+Default ports:
 
-```bash
-chmod +x scripts/docker_smoke_test.sh
-./scripts/docker_smoke_test.sh
-```
+- `pipeline-api`: `http://localhost:8000`
+- `reconstruction-service`: `http://localhost:8001`
+- `detection-service`: `http://localhost:8002`
+- `minio`: `http://localhost:9000`
+- `minio console`: `http://localhost:9001`
 
-Useful Docker commands:
+By default, Compose uses the real reconstruction adapter and the stub detection adapter.
 
-```bash
-docker compose ps
-docker compose logs -f pipeline-api reconstruction-service detection-service
-docker compose down -v
-```
-
-## Example Flow
+## Example Usage
 
 Create a job:
 
 ```bash
 curl -X POST http://localhost:8000/v1/jobs \
-  -F "file=@sample.h5"
+  -F "file=@sample.dcm"
 ```
 
 Check status:
@@ -118,7 +99,7 @@ Check status:
 curl http://localhost:8000/v1/jobs/<job_id>
 ```
 
-Get results:
+Get the result manifest:
 
 ```bash
 curl http://localhost:8000/v1/jobs/<job_id>/results
@@ -130,10 +111,67 @@ Download findings JSON:
 curl http://localhost:8000/v1/jobs/<job_id>/artifacts/findings_json
 ```
 
+## Smoke Test
+
+```bash
+chmod +x scripts/docker_smoke_test.sh
+./scripts/docker_smoke_test.sh
+```
+
+The script submits a generated DICOM file to `pipeline-api`, waits for completion, and prints the result manifest and findings JSON.
+
+## Local Development
+
+Create a virtual environment and install the base dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install ".[dev]"
+```
+
+Run the API locally:
+
+```bash
+uvicorn mri_analysis.pipeline_api.main:create_app --factory --reload
+```
+
+For local filesystem-backed development:
+
+```bash
+export STORAGE_MODE=local
+export STORAGE_ROOT=.data/storage
+export DATABASE_URL=sqlite:///./mri_analysis.db
+```
+
+## Model Configuration
+
+Enable the real reconstruction adapter:
+
+```bash
+pip install ".[dev,reconstruction]"
+export RECONSTRUCTION_ADAPTER=monai_unet
+export RECONSTRUCTION_MODEL_PATH=$(pwd)/demo_checkpoint/unet_mri_reconstruction.pt
+```
+
+Optional external detection bundle:
+
+```bash
+mkdir -p model_bundles/brats_mri_segmentation/models
+# place model.pt into model_bundles/brats_mri_segmentation/models/model.pt
+pip install ".[dev,detection]"
+export DETECTION_ADAPTER=segresnet
+export DETECTION_BUNDLE_DIR=$(pwd)/model_bundles/brats_mri_segmentation
+```
+
 ## Tests
 
 ```bash
 pytest
 ```
 
-The test suite runs with local filesystem-backed storage and SQLite, while inference containers are exercised through the same FastAPI contracts used in Compose.
+## Notes
+
+- The repository intentionally does not include large detection weights or training datasets.
+- The optional SegResNet path is for external bundle integration, not for the default repository run.
+- The public interface is HTTP upload based. If strict file-path container entrypoints are required, a thin wrapper still needs to be added.
